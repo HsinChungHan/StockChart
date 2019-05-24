@@ -66,6 +66,7 @@ final class KLineView: BasicStockView {
         super.drawDottedLines(horizontalLines: horizontalLines, verticalLines: verticalLines)
         chartsScrollView.contentSize = CGSize.init(width: CGFloat(Double(candles.count) * candleWidth), height: gridView.frame.height)
         
+        
         chartContentView.widthAnchor.constraint(equalToConstant: CGFloat(Double(candles.count) * candleWidth)).isActive = true
         
         fetchAndRedrawRightView()

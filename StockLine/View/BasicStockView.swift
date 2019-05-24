@@ -116,7 +116,9 @@ class BasicStockView: UIView {
        
         
         chartsScrollView.addSubview(chartContentView)
-        chartContentView.frame = CGRect.init(x: 0, y: 0, width: chartsScrollView.bounds.width + 2000, height: chartsScrollView.bounds.height)
+        chartContentView.anchor(top: chartsScrollView.topAnchor, bottom: chartsScrollView.bottomAnchor, leading: chartsScrollView.leadingAnchor, trailing: nil)
+        topView.layoutIfNeeded()
+        chartContentView.heightAnchor.constraint(equalToConstant: frame.height - (topView.frame.height*2)).isActive = true
     }
     
     
