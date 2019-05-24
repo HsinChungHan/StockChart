@@ -23,7 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate{
     fileprivate func runApplication(){
         window = UIWindow()
-        window?.rootViewController = ChartViewController()
+//        window?.rootViewController = ChartViewController()
+        window?.rootViewController = ChartUsingViewController()
         window?.makeKeyAndVisible()
     }
 }

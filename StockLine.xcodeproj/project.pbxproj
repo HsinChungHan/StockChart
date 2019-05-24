@@ -7,11 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D168F5BD22971A7F006D61FE /* String_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D168F5BC22971A7F006D61FE /* String_Extension.swift */; };
+		D1708FA2229239A400A8041E /* ChartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1708FA1229239A400A8041E /* ChartManager.swift */; };
+		D1708FA422923A0200A8041E /* CandleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1708FA322923A0200A8041E /* CandleItem.swift */; };
+		D1708FA622927F1600A8041E /* ChartUsingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1708FA522927F1600A8041E /* ChartUsingViewController.swift */; };
 		D18022CD228C1B1900FC82EC /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18022CC228C1B1900FC82EC /* ChartViewController.swift */; };
 		D18022CF228C1C4C00FC82EC /* KLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18022CE228C1C4C00FC82EC /* KLineView.swift */; };
 		D18022D1228C1C6F00FC82EC /* TechView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18022D0228C1C6F00FC82EC /* TechView.swift */; };
 		D18022D3228C1F8A00FC82EC /* CurrentLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18022D2228C1F8A00FC82EC /* CurrentLineView.swift */; };
 		D18022D5228C2C8E00FC82EC /* BasicStockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18022D4228C2C8E00FC82EC /* BasicStockView.swift */; };
+		D18A3612229301650015EC29 /* Double_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18A3611229301650015EC29 /* Double_Extension.swift */; };
 		D194A1D62281A3EC00B4C943 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D194A1D52281A3EC00B4C943 /* AppDelegate.swift */; };
 		D194A1DD2281A3ED00B4C943 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D194A1DC2281A3ED00B4C943 /* Assets.xcassets */; };
 		D194A1E02281A3ED00B4C943 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D194A1DE2281A3ED00B4C943 /* LaunchScreen.storyboard */; };
@@ -22,11 +27,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D168F5BC22971A7F006D61FE /* String_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String_Extension.swift; sourceTree = "<group>"; };
+		D1708FA1229239A400A8041E /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
+		D1708FA322923A0200A8041E /* CandleItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleItem.swift; sourceTree = "<group>"; };
+		D1708FA522927F1600A8041E /* ChartUsingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartUsingViewController.swift; sourceTree = "<group>"; };
 		D18022CC228C1B1900FC82EC /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		D18022CE228C1C4C00FC82EC /* KLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineView.swift; sourceTree = "<group>"; };
 		D18022D0228C1C6F00FC82EC /* TechView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechView.swift; sourceTree = "<group>"; };
 		D18022D2228C1F8A00FC82EC /* CurrentLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLineView.swift; sourceTree = "<group>"; };
 		D18022D4228C2C8E00FC82EC /* BasicStockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStockView.swift; sourceTree = "<group>"; };
+		D18A3611229301650015EC29 /* Double_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double_Extension.swift; sourceTree = "<group>"; };
 		D194A1D22281A3EC00B4C943 /* StockLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StockLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D194A1D52281A3EC00B4C943 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D194A1DC2281A3ED00B4C943 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -69,6 +79,8 @@
 			isa = PBXGroup;
 			children = (
 				D194A1D52281A3EC00B4C943 /* AppDelegate.swift */,
+				D1708FA1229239A400A8041E /* ChartManager.swift */,
+				D1708FA322923A0200A8041E /* CandleItem.swift */,
 				D1CCE703228E757A002A7CE3 /* Utilities */,
 				D1CCE709228E75D5002A7CE3 /* Controller */,
 				D1CCE70A228E75E0002A7CE3 /* View */,
@@ -85,6 +97,8 @@
 			children = (
 				D194A1E72281A40100B4C943 /* UIViewExtension.swift */,
 				D194A1ED2281AFAA00B4C943 /* UIBezierPath_extension.swift */,
+				D18A3611229301650015EC29 /* Double_Extension.swift */,
+				D168F5BC22971A7F006D61FE /* String_Extension.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -102,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				D18022CC228C1B1900FC82EC /* ChartViewController.swift */,
+				D1708FA522927F1600A8041E /* ChartUsingViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -111,8 +126,8 @@
 			children = (
 				D18022D4228C2C8E00FC82EC /* BasicStockView.swift */,
 				D18022CE228C1C4C00FC82EC /* KLineView.swift */,
-				D18022D2228C1F8A00FC82EC /* CurrentLineView.swift */,
 				D18022D0228C1C6F00FC82EC /* TechView.swift */,
+				D18022D2228C1F8A00FC82EC /* CurrentLineView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -149,6 +164,7 @@
 				TargetAttributes = {
 					D194A1D12281A3EC00B4C943 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1020;
 					};
 				};
 			};
@@ -191,12 +207,17 @@
 			files = (
 				D18022D1228C1C6F00FC82EC /* TechView.swift in Sources */,
 				D194A1E82281A40100B4C943 /* UIViewExtension.swift in Sources */,
+				D1708FA2229239A400A8041E /* ChartManager.swift in Sources */,
 				D194A1EE2281AFAA00B4C943 /* UIBezierPath_extension.swift in Sources */,
+				D168F5BD22971A7F006D61FE /* String_Extension.swift in Sources */,
+				D1708FA622927F1600A8041E /* ChartUsingViewController.swift in Sources */,
 				D194A1D62281A3EC00B4C943 /* AppDelegate.swift in Sources */,
 				D18022D5228C2C8E00FC82EC /* BasicStockView.swift in Sources */,
 				D18022CD228C1B1900FC82EC /* ChartViewController.swift in Sources */,
+				D18A3612229301650015EC29 /* Double_Extension.swift in Sources */,
 				D18022CF228C1C4C00FC82EC /* KLineView.swift in Sources */,
 				D18022D3228C1F8A00FC82EC /* CurrentLineView.swift in Sources */,
+				D1708FA422923A0200A8041E /* CandleItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,7 +364,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Hsin.CoolApp.StockLine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -361,7 +382,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Hsin.CoolApp.StockLine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

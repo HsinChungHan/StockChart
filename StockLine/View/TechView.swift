@@ -8,5 +8,10 @@
 
 import UIKit
 class TechView: BasicStockView {
+    func drawTech(){
+        
+    }
     
+    func drawMountain() {
+    }
 }
