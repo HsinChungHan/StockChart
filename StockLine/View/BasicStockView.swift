@@ -55,30 +55,29 @@ class BasicStockView: UIView {
     
     lazy var gridView: UIView = {
         let view = UIView()
-        view.backgroundColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-        //        view.widthAnchor.constraint(equalToConstant: chartWidth).isActive = true
+        view.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
+        view.widthAnchor.constraint(equalToConstant: chartWidth).isActive = true
         return view
     }()
     
     var chartContentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .clear
         return view
     }()
     
     
     lazy var chartsScrollView: UIScrollView = {
-        let sv = UIScrollView()
+       let sv = UIScrollView()
+        sv.backgroundColor = .clear
+        sv.isScrollEnabled = true
         return sv
     }()
     
     
-   
-    
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -100,8 +99,9 @@ class BasicStockView: UIView {
     fileprivate func setupLayout(){
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        
-        [leftView, gridView, rightView].forEach({stackView.addArrangedSubview($0)})
+        [leftView, gridView, rightView].forEach { (view) in
+            stackView.addArrangedSubview(view)
+        }
         addSubview(topView)
         addSubview(stackView)
         addSubview(bottomView)
@@ -113,11 +113,12 @@ class BasicStockView: UIView {
         stackView.anchor(top: topView.bottomAnchor, bottom: bottomView.topAnchor, leading: leadingAnchor, trailing: trailingAnchor)
         gridView.addSubview(chartsScrollView)
         chartsScrollView.fillSuperView()
+       
+        
         chartsScrollView.addSubview(chartContentView)
-        chartContentView.anchor(top: chartsScrollView.topAnchor, bottom: chartsScrollView.bottomAnchor, leading: chartsScrollView.leadingAnchor, trailing: nil)
-        chartContentView.heightAnchor.constraint(equalToConstant: frame.height - (labelHeight*2)).isActive = true
-        chartContentView.widthAnchor.constraint(greaterThanOrEqualToConstant: chartWidth).isActive = true
+        chartContentView.frame = CGRect.init(x: 0, y: 0, width: chartsScrollView.bounds.width + 2000, height: chartsScrollView.bounds.height)
     }
+    
     
     
     func drawDottedLines(horizontalLines: Int, verticalLines: Int){
@@ -179,7 +180,9 @@ class BasicStockView: UIView {
         default:
             return 0
         }
-        
     }
     
 }
+
+
+

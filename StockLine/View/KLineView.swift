@@ -20,7 +20,7 @@ enum CandleValue{
     case xPosition
 }
 
-class KLineView: BasicStockView {
+final class KLineView: BasicStockView {
     fileprivate var chartManager = ChartManager()
     var horizontalLines = 4
     var verticalLines = 3
@@ -51,33 +51,39 @@ class KLineView: BasicStockView {
     lazy var currentBottomLabels = [UILabel]()
     
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        chartsScrollView.isScrollEnabled = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         gridView.layoutIfNeeded()
-        //MARK: -Todo 在這邊呼叫會有從背景回來，造成再次呼叫的結果
         super.drawDottedLines(horizontalLines: horizontalLines, verticalLines: verticalLines)
+        chartsScrollView.contentSize = CGSize.init(width: CGFloat(Double(candles.count) * candleWidth), height: gridView.frame.height)
+        
+        chartContentView.widthAnchor.constraint(equalToConstant: CGFloat(Double(candles.count) * candleWidth)).isActive = true
         
         fetchAndRedrawRightView()
         
         setupBottomView()
         
         drawChartContentView()
-        
+        chartsScrollView.delegate = self
     }
     
     func drawKLine(contentOffsetXType: ContentOffsetType = .ToLast) {
+        
         chartsScrollView.isScrollEnabled = true
         //先移除之前的widthAnchor
         chartContentView.removeConstraint(chartContentView.constraints[1])
         chartContentView.widthAnchor.constraint(equalToConstant: CGFloat(Double(candles.count) * candleWidth)).isActive = true
         
     }
-    
-    
-    
-    
-    
-    
     
     
     //MARK: - Right View
@@ -110,6 +116,13 @@ class KLineView: BasicStockView {
 
     
     fileprivate func setupRightView(){
+        //每一次滑動，都要先清除原有的labels
+        currentRightLabels = []
+        for label in rightView.subviews{
+            label.removeFromSuperview()
+        }
+        
+        
         rightView.layoutIfNeeded()
         setupRightLabel(value: rightMax.translate(decimalPlaces: decimalPlaces) , yPosition: 8, storedArray: &currentRightLabels)
         
@@ -145,6 +158,12 @@ class KLineView: BasicStockView {
     
     
     fileprivate func setupBottomView(){
+        //每一次滑動，都要先清除原有的labels
+        currentBottomLabels = []
+        for label in bottomView.subviews{
+            label.removeFromSuperview()
+        }
+        
         
         setupBottomLabel(value: candles[max(0, startCandle)].Time.modifyTime() , xPosition: 0, storedArray: &currentBottomLabels)
         for index in 1...verticalLines{
@@ -199,6 +218,20 @@ class KLineView: BasicStockView {
             drawACandle(high: high, low: low, open: open, close: close, sequence: index)
         }
     }
-    
+}
 
+
+
+extension KLineView: UIScrollViewDelegate{
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        startCandle = Int(Double(scrollView.contentOffset.x) / candleWidth)
+        fetchAndRedrawRightView()
+        setupBottomView()
+        drawChartContentView()
+    }
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        print("You drag me")
+    }
+    
+    
 }

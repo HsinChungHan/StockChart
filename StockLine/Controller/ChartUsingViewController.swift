@@ -18,7 +18,7 @@ enum Strategy: String, CaseIterable{
     
 }
 
-class ChartUsingViewController: UIViewController {
+final class ChartUsingViewController: UIViewController {
     let buttonStackView = UIStackView()
     let contentView = UIView()
     let chartVC = ChartViewController()
@@ -28,6 +28,11 @@ class ChartUsingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         setupLayout()
         embadedVCInContentView()
     }

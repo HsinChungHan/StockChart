@@ -7,7 +7,7 @@
 //
 
 import UIKit
-class TechView: BasicStockView {
+final class TechView: BasicStockView {
     func drawTech(){
         
     }
