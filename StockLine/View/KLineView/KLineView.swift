@@ -21,45 +21,38 @@ enum CandleValue{
 }
 
 final class KLineView: BasicStockView {
-    fileprivate var chartManager = ChartManager()
-    var horizontalLines = 4
-    var verticalLines = 3
-    var candleWidth: Double = 5
-    
     var isMountain = false
     
-    fileprivate var MAValues: [String: [Double]] = [:]
-    var candles: [CandleItems] = []{
-        didSet{
-            DispatchQueue.global(qos: .userInteractive).async {
-                self.MAValues = self.chartManager.computeMA(candles: self.candles)
-            }
-        }
-    }
     fileprivate var theCurrentPrice: Double {
         let value = Double(candles.last?.Close ?? "0") ?? 0
         return value
     }
     
     fileprivate var startCandle = 0
-    var visibleCount: Int{
-        return Int(gridView.frame.width / CGFloat(candleWidth))
-    }
+    
     var dottedLength = 5
-    let decimalPlaces: UInt8 = 5
-    lazy var currentRightLabels = [UILabel]()
     lazy var currentBottomLabels = [UILabel]()
+    
+    
+    lazy var rightView: KLineRightView = {
+        let view = KLineRightView.init(candles: candles, visibleCount: visibleCount, horizontalLines: horizontalLines)
+        view.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        view.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - chartWidth)/2).isActive = true
+        return view
+    }()
+    
+    fileprivate func setWholeWidth() {
+        chartsScrollView.contentSize = CGSize.init(width: CGFloat(Double(candles.count) * candleWidth), height: gridView.frame.height)
+        chartContentView.widthAnchor.constraint(equalToConstant: CGFloat(Double(candles.count) * candleWidth)).isActive = true
+    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         gridView.layoutIfNeeded()
+        overallStackView.addArrangedSubview(rightView)
         super.drawDottedLines(horizontalLines: horizontalLines, verticalLines: verticalLines)
-        chartsScrollView.contentSize = CGSize.init(width: CGFloat(Double(candles.count) * candleWidth), height: gridView.frame.height)
+        setWholeWidth()
         
-        
-        chartContentView.widthAnchor.constraint(equalToConstant: CGFloat(Double(candles.count) * candleWidth)).isActive = true
-        
-        fetchAndRedrawRightView()
         setupBottomView()
         drawChartContentView()
         chartsScrollView.delegate = self
@@ -73,62 +66,6 @@ final class KLineView: BasicStockView {
         chartContentView.widthAnchor.constraint(equalToConstant: CGFloat(Double(candles.count) * candleWidth)).isActive = true
         
     }
-    
-    
-    //MARK: - Right View
-    fileprivate func fetchRightMaxAndMin(){
-        var visibleCandles = ArraySlice<CandleItems>()
-        //第一跟蠟燭和最後一根蠟燭必定會貼齊最左和最右
-        if startCandle + visibleCount < candles.count{
-            visibleCandles = candles[max(0, startCandle)...(startCandle+visibleCount)]
-        }else{
-            //一定會是最後一組candles
-            visibleCandles = candles[startCandle...(candles.count - 1)]
-        }
-        rightMax = Double(visibleCandles.map{$0.High}.max() ?? "0")  ?? 0
-        rightMin = Double(visibleCandles.map{$0.Low}.min() ?? "0")  ?? 0
-        
-        //顯示的最大值將會比真實的最大值大上一點點
-        rightMax = rightMax + rightDiff * 0.2
-        rightMin = rightMin - rightDiff * 0.2
-        
-        print("rightMax: \(rightMax)")
-        print("rightMin: \(rightMin)")
-    }
-    
-    fileprivate func setupRightLabel(value: String, yPosition: Int, storedArray: inout [UILabel]){
-        let valueLabel = UILabel.init(frame: CGRect.init(x: 0, y: yPosition - 8, width: Int(rightView.frame.width), height: 16))
-        valueLabel.text = value
-        rightView.addSubview(valueLabel)
-        storedArray.append(valueLabel)
-    }
-
-    
-    fileprivate func setupRightView(){
-        //每一次滑動，都要先清除原有的labels
-        currentRightLabels = []
-        for label in rightView.subviews{
-            label.removeFromSuperview()
-        }
-        
-        
-        rightView.layoutIfNeeded()
-        setupRightLabel(value: rightMax.translate(decimalPlaces: decimalPlaces) , yPosition: 8, storedArray: &currentRightLabels)
-        
-        //這邊-1是希望將最下面的label另外設定位置
-        for index in 1...horizontalLines - 1{
-            let y = gridView.frame.height * CGFloat(Double(index) / Double(horizontalLines))
-            setupRightLabel(value: (rightMax - rightDiff * Double(index) / Double(horizontalLines)).translate(decimalPlaces: decimalPlaces) , yPosition: Int(y), storedArray: &currentRightLabels)
-        }
-        setupRightLabel(value: rightMin.translate(decimalPlaces: decimalPlaces) , yPosition: Int(rightView.frame.height) - 8, storedArray: &currentRightLabels)
-    }
-    
-    fileprivate func fetchAndRedrawRightView(){
-        fetchRightMaxAndMin()
-        setupRightView()
-    }
-    
-    
     
     
     
@@ -214,9 +151,9 @@ final class KLineView: BasicStockView {
 extension KLineView: UIScrollViewDelegate{
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         startCandle = Int(Double(scrollView.contentOffset.x) / candleWidth)
-        fetchAndRedrawRightView()
+        rightView.startCandle = startCandle
         setupBottomView()
-        drawChartContentView()
+//        drawChartContentView()
     }
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         print("You drag me")

@@ -19,7 +19,6 @@ final class ChartViewController: UIViewController {
     
     fileprivate lazy var techView: TechView = {
         let tv = TechView()
-//        tv.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height - kLineViewHeight).isActive = true
         return tv
     }()
     

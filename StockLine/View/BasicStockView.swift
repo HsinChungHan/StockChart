@@ -22,9 +22,24 @@ class BasicStockView: UIView {
     //MARK: -Const
     let chartWidth = UIScreen.main.bounds.width * 2 / 3
     let labelHeight: CGFloat = 40
+    let candleWidth: Double = 5
     
     //MARK:- Properties
     var dottedLineLength = 5
+    fileprivate var chartManager = ChartManager()
+    fileprivate var MAValues: [String: [Double]] = [:]
+    var candles: [CandleItems] = []{
+        didSet{
+            DispatchQueue.global(qos: .userInteractive).async {
+                self.MAValues = self.chartManager.computeMA(candles: self.candles)
+            }
+        }
+    }
+    var visibleCount: Int{
+        return Int(gridView.frame.width / CGFloat(candleWidth))
+    }
+    var horizontalLines = 4
+    var verticalLines = 4
     
     //MARK: View
     let topView: UIView = {
@@ -40,13 +55,7 @@ class BasicStockView: UIView {
         return view
     }()
     
-    lazy var rightView: UIView = {
-        let view = UIView()
-        view.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
-        view.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - chartWidth)/2).isActive = true
-        return view
-    }()
-    
+
     let bottomView: UIView = {
         let view = UILabel()
         view.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
@@ -74,6 +83,7 @@ class BasicStockView: UIView {
         return sv
     }()
     
+    let overallStackView = UIStackView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -97,20 +107,21 @@ class BasicStockView: UIView {
     
     
     fileprivate func setupLayout(){
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        [leftView, gridView, rightView].forEach { (view) in
-            stackView.addArrangedSubview(view)
+        
+        overallStackView.axis = .horizontal
+        [leftView, gridView].forEach { (view) in
+            overallStackView.addArrangedSubview(view)
         }
+        
         addSubview(topView)
-        addSubview(stackView)
+        addSubview(overallStackView)
         addSubview(bottomView)
         topView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         topView.anchor(top: topAnchor, bottom: nil, leading: nil, trailing: nil, padding: .zero, size: .init(width: chartWidth, height: labelHeight))
         
         bottomView.anchor(top: nil, bottom: bottomAnchor, leading: topView.leadingAnchor, trailing: topView.trailingAnchor, padding: .zero, size: .init(width: 0, height: labelHeight))
         
-        stackView.anchor(top: topView.bottomAnchor, bottom: bottomView.topAnchor, leading: leadingAnchor, trailing: trailingAnchor)
+        overallStackView.anchor(top: topView.bottomAnchor, bottom: bottomView.topAnchor, leading: leadingAnchor, trailing: trailingAnchor)
         gridView.addSubview(chartsScrollView)
         chartsScrollView.fillSuperView()
        
