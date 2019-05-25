@@ -16,7 +16,11 @@ class KLineBottomView: UIView {
         }
     }
     var verticalLines = 4
-    var visibleCount: Int
+    var visibleCount: Int{
+        didSet{
+             setupBottomView()
+        }
+    }
     fileprivate var MAValues: [String: [Double]] = [:]
     var candles: [CandleItems] = []{
         didSet{

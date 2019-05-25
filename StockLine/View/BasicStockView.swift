@@ -22,7 +22,7 @@ class BasicStockView: UIView {
     //MARK: -Const
     let chartWidth = UIScreen.main.bounds.width * 2 / 3
     let labelHeight: CGFloat = 40
-    let candleWidth: Double = 5
+//    var candleWidth: Double = 5
     
     //MARK:- Properties
     var dottedLineLength = 5
@@ -35,9 +35,9 @@ class BasicStockView: UIView {
             }
         }
     }
-    var visibleCount: Int{
-        return Int(gridView.frame.width / CGFloat(candleWidth))
-    }
+//    var visibleCount: Int{
+//        return Int(gridView.frame.width / CGFloat(candleWidth))
+//    }
     var horizontalLines = 4
     var verticalLines = 3
     
@@ -67,8 +67,10 @@ class BasicStockView: UIView {
        let sv = UIScrollView()
         sv.backgroundColor = .clear
         sv.isScrollEnabled = true
+        
         return sv
     }()
+    
     
     
     

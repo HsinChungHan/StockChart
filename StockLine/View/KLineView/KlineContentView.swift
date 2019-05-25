@@ -9,9 +9,18 @@
 import UIKit
 
 class KlineContentView: UIView {
-    var candleWidth: Double
+    var visibleCount: Int{
+        didSet{
+            drawChartContentView()
+        }
+    }
+    var candleWidth: Double{
+        didSet{
+            drawChartContentView()
+        }
+    }
     var candles: [CandleItems]
-    var visibleCount: Int
+    
     var startCandle: Int = 0{
         didSet{
             drawChartContentView()
@@ -33,7 +42,6 @@ class KlineContentView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        backgroundColor = #colorLiteral(red: 1, green: 0.2527923882, blue: 1, alpha: 1)
         drawChartContentView()
     }
     //MARK: -Draw Chart
@@ -45,6 +53,7 @@ class KlineContentView: UIView {
             .yClose: rightView.convertPosition(system: .Right, value: close),
             .xPosition: CGFloat(Double(sequence) * candleWidth) + CGFloat(candleWidth/2)
         ]
+        print(candleValue[.xPosition])
         let strokeColor = (close > open) ? #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1).cgColor : #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1).cgColor
         let highLowLine = UIBezierPath()
         let highLowLayer = CAShapeLayer()
@@ -65,16 +74,22 @@ class KlineContentView: UIView {
         layer.addSublayer(openCloseLayer)
     }
     
+    
     fileprivate func drawChartContentView(){
         let firstVisibleCandle = max(0, startCandle)
         let lastVisibleCandle = min(candles.count-1, startCandle+visibleCount)
+        print("firstVisibleCandle: \(firstVisibleCandle)")
+        print("lastVisibleCandle: \(lastVisibleCandle)")
         layer.sublayers = []
         for index in (firstVisibleCandle...lastVisibleCandle){
             let high = Double(candles[index].High) ?? 0
             let low = Double(candles[index].Low) ?? 0
             let open = Double(candles[index].Open) ?? 0
             let close = Double(candles[index].Close) ?? 0
+            print("index: \(index)")
             drawACandle(high: high, low: low, open: open, close: close, sequence: index)
         }
     }
+ 
+    
 }

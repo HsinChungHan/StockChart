@@ -9,11 +9,9 @@
 import UIKit
 
 final class KLineRightView: UIView {
-    let candleWidth: Double = 5
-    var horizontalLines = 4
+    var horizontalLines: Int
     let decimalPlaces: UInt8 = 5
     fileprivate var chartManager = ChartManager()
-    
     var startCandle = 0{
         didSet{
             fetchRightMaxAndMin()
@@ -35,12 +33,18 @@ final class KLineRightView: UIView {
         return rightMax - rightMin
     }
    
-    var visibleCount: Int
+    var visibleCount: Int{
+        didSet{
+            fetchRightMaxAndMin()
+            setupRightView()
+        }
+    }
     init(candles: [CandleItems], visibleCount: Int, horizontalLines: Int) {
         self.visibleCount = visibleCount
+        self.horizontalLines = horizontalLines
         super.init(frame: .zero)
         self.candles = candles
-        self.horizontalLines = horizontalLines
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
