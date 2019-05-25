@@ -39,7 +39,7 @@ class BasicStockView: UIView {
         return Int(gridView.frame.width / CGFloat(candleWidth))
     }
     var horizontalLines = 4
-    var verticalLines = 4
+    var verticalLines = 3
     
     //MARK: View
     let topView: UIView = {
@@ -55,13 +55,6 @@ class BasicStockView: UIView {
         return view
     }()
     
-
-    let bottomView: UIView = {
-        let view = UILabel()
-        view.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
-        return view
-    }()
-    
     lazy var gridView: UIView = {
         let view = UIView()
         view.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
@@ -69,7 +62,7 @@ class BasicStockView: UIView {
         return view
     }()
     
-    var chartContentView: UIView = {
+    var chartView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         return view
@@ -83,7 +76,6 @@ class BasicStockView: UIView {
         return sv
     }()
     
-    let overallStackView = UIStackView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -107,29 +99,25 @@ class BasicStockView: UIView {
     
     
     fileprivate func setupLayout(){
-        
-        overallStackView.axis = .horizontal
-        [leftView, gridView].forEach { (view) in
-            overallStackView.addArrangedSubview(view)
-        }
-        
         addSubview(topView)
-        addSubview(overallStackView)
-        addSubview(bottomView)
+        addSubview(leftView)
+        addSubview(gridView)
+
         topView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         topView.anchor(top: topAnchor, bottom: nil, leading: nil, trailing: nil, padding: .zero, size: .init(width: chartWidth, height: labelHeight))
+        topView.layoutIfNeeded()
+        gridView.anchor(top: topView.bottomAnchor, bottom: nil, leading: nil, trailing: nil, padding: .zero, size: .init(width: chartWidth, height: frame.height - (topView.frame.height*2)))
+        gridView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        leftView.anchor(top: gridView.topAnchor, bottom: gridView.bottomAnchor, leading: leadingAnchor, trailing: gridView.leadingAnchor, padding: .zero, size: .zero)
         
-        bottomView.anchor(top: nil, bottom: bottomAnchor, leading: topView.leadingAnchor, trailing: topView.trailingAnchor, padding: .zero, size: .init(width: 0, height: labelHeight))
-        
-        overallStackView.anchor(top: topView.bottomAnchor, bottom: bottomView.topAnchor, leading: leadingAnchor, trailing: trailingAnchor)
         gridView.addSubview(chartsScrollView)
         chartsScrollView.fillSuperView()
        
         
-        chartsScrollView.addSubview(chartContentView)
-        chartContentView.anchor(top: chartsScrollView.topAnchor, bottom: chartsScrollView.bottomAnchor, leading: chartsScrollView.leadingAnchor, trailing: nil)
-        topView.layoutIfNeeded()
-        chartContentView.heightAnchor.constraint(equalToConstant: frame.height - (topView.frame.height*2)).isActive = true
+        chartsScrollView.addSubview(chartView)
+        chartView.anchor(top: chartsScrollView.topAnchor, bottom: chartsScrollView.bottomAnchor, leading: chartsScrollView.leadingAnchor, trailing: nil)
+        
+        chartView.heightAnchor.constraint(equalToConstant: frame.height - (topView.frame.height*2)).isActive = true
     }
     
     
@@ -137,7 +125,7 @@ class BasicStockView: UIView {
     func drawDottedLines(horizontalLines: Int, verticalLines: Int){
         gridView.layoutIfNeeded()
         let gridBorder = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: gridView.frame.width, height: gridView.frame.height), cornerRadius: 0)
-        
+        print("gridView.frame.width: \(gridView.frame.width)")
         //draw border of gridView
         let gridBorderLayer = CAShapeLayer()
         gridBorderLayer.path = gridBorder.cgPath
@@ -182,16 +170,6 @@ class BasicStockView: UIView {
             gridLineLayer.lineWidth = 1
             gridLineLayer.strokeColor = UIColor.lightGray.cgColor
             gridView.layer.addSublayer(gridLineLayer)
-        }
-    }
-    
-    func convertPosition(system: PositionSystem, value: Double ) -> CGFloat{
-        chartContentView.layoutIfNeeded()
-        switch system{
-        case .Right:
-            return CGFloat((rightMax - value) / rightDiff) * chartContentView.frame.height
-        default:
-            return 0
         }
     }
     

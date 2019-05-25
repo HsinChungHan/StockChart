@@ -57,6 +57,7 @@ final class KLineRightView: UIView {
         var visibleCandles = ArraySlice<CandleItems>()
         //第一跟蠟燭和最後一根蠟燭必定會貼齊最左和最右
         if startCandle + visibleCount < candles.count{
+            print("startCandle: \(startCandle)")
             visibleCandles = candles[max(0, startCandle)...(startCandle+visibleCount)]
         }else{
             //一定會是最後一組candles
@@ -105,6 +106,7 @@ final class KLineRightView: UIView {
     }
     
     public func convertPosition(system: PositionSystem, value: Double ) -> CGFloat{
+        layoutIfNeeded()
         switch system{
         case .Right:
             return CGFloat((rightMax - value) / rightDiff) * frame.height
