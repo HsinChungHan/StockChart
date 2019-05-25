@@ -26,6 +26,7 @@
 		D1C358BB2298A41E0022A91B /* KLineBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C358BA2298A41E0022A91B /* KLineBottomView.swift */; };
 		D1CCE707228E75C6002A7CE3 /* PreviousCandles.json in Resources */ = {isa = PBXBuildFile; fileRef = D1CCE705228E75C6002A7CE3 /* PreviousCandles.json */; };
 		D1CCE708228E75C6002A7CE3 /* Candles.json in Resources */ = {isa = PBXBuildFile; fileRef = D1CCE706228E75C6002A7CE3 /* Candles.json */; };
+		D1DF179B2298BFCD0075C48D /* KlineContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1DF179A2298BFCD0075C48D /* KlineContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		D1C358BA2298A41E0022A91B /* KLineBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineBottomView.swift; sourceTree = "<group>"; };
 		D1CCE705228E75C6002A7CE3 /* PreviousCandles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PreviousCandles.json; sourceTree = "<group>"; };
 		D1CCE706228E75C6002A7CE3 /* Candles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Candles.json; sourceTree = "<group>"; };
+		D1DF179A2298BFCD0075C48D /* KlineContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlineContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 				D18022CE228C1C4C00FC82EC /* KLineView.swift */,
 				D168F5C6229825F8006D61FE /* KLineRightView.swift */,
 				D1C358BA2298A41E0022A91B /* KLineBottomView.swift */,
+				D1DF179A2298BFCD0075C48D /* KlineContentView.swift */,
 			);
 			path = KLineView;
 			sourceTree = "<group>";
@@ -237,6 +240,7 @@
 				D1708FA622927F1600A8041E /* ChartUsingViewController.swift in Sources */,
 				D194A1D62281A3EC00B4C943 /* AppDelegate.swift in Sources */,
 				D18022D5228C2C8E00FC82EC /* BasicStockView.swift in Sources */,
+				D1DF179B2298BFCD0075C48D /* KlineContentView.swift in Sources */,
 				D18A3612229301650015EC29 /* Double_Extension.swift in Sources */,
 				D18022CF228C1C4C00FC82EC /* KLineView.swift in Sources */,
 				D1C358BB2298A41E0022A91B /* KLineBottomView.swift in Sources */,

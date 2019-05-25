@@ -43,16 +43,28 @@ final class KLineView: BasicStockView {
         return view
     }()
     
+    lazy var chartView: KlineContentView = {
+        let view = KlineContentView.init(candles: candles, candleWidth: candleWidth, visibleCount: visibleCount, rightView: rightView)
+        view.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+        return view
+    }()
     
     
     
     fileprivate func setupLayout() {
         addSubview(rightView)
         rightView.anchor(top: gridView.topAnchor, bottom: gridView.bottomAnchor, leading: gridView.trailingAnchor, trailing: trailingAnchor)
-        print("gridView: \(gridView.frame.height)")
-        chartsScrollView.contentSize = CGSize.init(width: CGFloat(Double(candles.count) * candleWidth), height: gridView.frame.height)
-        chartView.widthAnchor.constraint(equalToConstant: CGFloat(Double(candles.count) * candleWidth)).isActive = true
+
+        chartsScrollView.addSubview(chartView)
+        chartView.anchor(top: chartsScrollView.topAnchor, bottom: chartsScrollView.bottomAnchor, leading: chartsScrollView.leadingAnchor, trailing: nil)
+        chartView.heightAnchor.constraint(equalToConstant: frame.height - (topView.frame.height*2)).isActive = true
+
         
+        chartView.widthAnchor.constraint(equalToConstant: CGFloat(Double(candles.count) * candleWidth)).isActive = true
+        //一定要在設定chartsScrollView.contentSize之前，執行layoutIfNeeded()
+        //因為有可能chartsScrollView.width = 0，導致chartsScrollView.contentSize的設定的width皆為0
+        chartsScrollView.layoutIfNeeded()
+        chartsScrollView.contentSize = CGSize.init(width: CGFloat(Double(candles.count) * candleWidth), height: gridView.frame.height)
         
         addSubview(bottomView)
         bottomView.anchor(top: gridView.bottomAnchor, bottom: bottomAnchor, leading: nil, trailing: nil)
@@ -63,55 +75,12 @@ final class KLineView: BasicStockView {
     override func layoutSubviews() {
         super.layoutSubviews()
         super.drawDottedLines(horizontalLines: horizontalLines, verticalLines: verticalLines)
-        
         setupLayout()
-        
-        drawChartContentView()
         chartsScrollView.delegate = self
     }
     
     
-    //MARK: -Draw Chart
-    fileprivate func drawACandle(high: Double, low: Double, open: Double, close: Double, sequence: Int){
-        let candleValue: [CandleValue: CGFloat] = [
-            .yHigh : rightView.convertPosition(system: .Right, value: high),
-            .yLow: rightView.convertPosition(system: .Right, value: low),
-            .yOpen: rightView.convertPosition(system: .Right, value: open),
-            .yClose: rightView.convertPosition(system: .Right, value: close),
-            .xPosition: CGFloat(Double(sequence) * candleWidth) + CGFloat(candleWidth/2)
-        ]
-        let strokeColor = (close > open) ? #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1).cgColor : #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1).cgColor
-        let highLowLine = UIBezierPath()
-        let highLowLayer = CAShapeLayer()
-        highLowLine.move(to: CGPoint.init(x: candleValue[.xPosition]!, y: candleValue[.yHigh]!))
-        highLowLine.addLine(to: CGPoint.init(x: candleValue[.xPosition]!, y: candleValue[.yLow]!))
-        highLowLayer.path = highLowLine.cgPath
-        highLowLayer.lineWidth = 1
-        highLowLayer.strokeColor = strokeColor
-        chartView.layer.addSublayer(highLowLayer)
-        
-        let openCloseLine = UIBezierPath()
-        let openCloseLayer = CAShapeLayer()
-        openCloseLine.move(to: CGPoint.init(x: candleValue[.xPosition]!, y: candleValue[.yOpen]!))
-        openCloseLine.addLine(to: CGPoint.init(x: candleValue[.xPosition]!, y: candleValue[.yClose]!))
-        openCloseLayer.path = openCloseLine.cgPath
-        openCloseLayer.lineWidth = CGFloat(candleWidth)
-        openCloseLayer.strokeColor = strokeColor
-        chartView.layer.addSublayer(openCloseLayer)
-    }
     
-    fileprivate func drawChartContentView(){
-        let firstVisibleCandle = max(0, startCandle)
-        let lastVisibleCandle = min(candles.count-1, startCandle+visibleCount)
-        chartView.layer.sublayers = []
-        for index in (firstVisibleCandle...lastVisibleCandle){
-            let high = Double(candles[index].High) ?? 0
-            let low = Double(candles[index].Low) ?? 0
-            let open = Double(candles[index].Open) ?? 0
-            let close = Double(candles[index].Close) ?? 0
-            drawACandle(high: high, low: low, open: open, close: close, sequence: index)
-        }
-    }
 }
 
 
@@ -121,7 +90,8 @@ extension KLineView: UIScrollViewDelegate{
         startCandle = Int(Double(scrollView.contentOffset.x) / candleWidth) > 0 ? Int(Double(scrollView.contentOffset.x) / candleWidth) : 0
         rightView.startCandle = startCandle
         bottomView.startCandle = startCandle
-        drawChartContentView()
+        chartView.startCandle = startCandle
+//        drawChartContentView()
     }
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         print("You drag me")

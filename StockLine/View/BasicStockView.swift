@@ -62,12 +62,6 @@ class BasicStockView: UIView {
         return view
     }()
     
-    var chartView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-    }()
-    
     
     lazy var chartsScrollView: UIScrollView = {
        let sv = UIScrollView()
@@ -75,6 +69,7 @@ class BasicStockView: UIView {
         sv.isScrollEnabled = true
         return sv
     }()
+    
     
     
     override init(frame: CGRect) {
@@ -90,7 +85,6 @@ class BasicStockView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         setupLayout()
-        
     }
     
     
@@ -112,12 +106,6 @@ class BasicStockView: UIView {
         
         gridView.addSubview(chartsScrollView)
         chartsScrollView.fillSuperView()
-       
-        
-        chartsScrollView.addSubview(chartView)
-        chartView.anchor(top: chartsScrollView.topAnchor, bottom: chartsScrollView.bottomAnchor, leading: chartsScrollView.leadingAnchor, trailing: nil)
-        
-        chartView.heightAnchor.constraint(equalToConstant: frame.height - (topView.frame.height*2)).isActive = true
     }
     
     
