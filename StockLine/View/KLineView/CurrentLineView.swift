@@ -8,26 +8,30 @@
 
 import UIKit
 
-class CurrentLineView: UIView {
-
+final class CurrentLineView: UIView {
+    public var currentPrice: Double = 0{
+        didSet{
+            currentPriceLabel.text = currentPrice.translate()
+        }
+    }
+    
+    
     fileprivate let currentLine: UIView = {
         let view = UIView()
         view.backgroundColor = #colorLiteral(red: 0.7254902124, green: 0.4784313738, blue: 0.09803921729, alpha: 1)
         return view
     }()
     
-    fileprivate let currentPriceLabel: UILabel = {
+    let currentPriceLabel: UILabel = {
         let label = UILabel()
-        label.text = "20000"
         label.backgroundColor = #colorLiteral(red: 0.7254902124, green: 0.4784313738, blue: 0.09803921729, alpha: 1)
-        label.font = UIFont.systemFont(ofSize: 30)
-        label.textAlignment = .center
         return label
     }()
     
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupLayout()
     }
     
    
@@ -37,11 +41,11 @@ class CurrentLineView: UIView {
     }
     
     fileprivate func setupLayout(){
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.addArrangedSubview(currentLine)
-        stackView.addArrangedSubview(currentPriceLabel)
-        stackView.fillSuperView()
+        addSubview(currentLine)
+        addSubview(currentPriceLabel)
+        currentLine.anchor(top: nil, bottom: nil, leading: leadingAnchor, trailing: trailingAnchor, padding: .zero, size: .init(width: 0, height: 3))
+        currentLine.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        currentPriceLabel.anchor(top: topAnchor, bottom: bottomAnchor, leading: nil, trailing: trailingAnchor, padding: .zero, size: .init(width: UIScreen.main.bounds.width / 6, height: 0))
         
     }
 

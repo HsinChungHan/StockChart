@@ -48,16 +48,14 @@ final class KLineView: BasicStockView {
             let x = candleWidth / 2 + Double(startCandle) * candleWidth
             chartsScrollView.contentOffset = CGPoint(x: x, y: 0)
             
-            
-            
         }
     }
     
     
-    
-    
     fileprivate var theCurrentPrice: Double {
-        return Double(candles.last?.Close ?? "0") ?? 0
+        let value = Double(candles.last?.Close ?? "0") ?? 0
+        currentLineView.currentPrice = value
+        return value
     }
     
     fileprivate var startCandle = 0{
@@ -82,7 +80,7 @@ final class KLineView: BasicStockView {
     }()
     
     lazy var chartView: KlineContentView = {
-        let view = KlineContentView.init(candles: candles, candleWidth: candleWidth, visibleCount: visibleCount, rightView: rightView)
+        let view = KlineContentView.init(candles: candles, candleWidth: candleWidth, visibleCount: visibleCount, kLineView: self)
         let pinch = UIPinchGestureRecognizer.init(target: self, action: #selector(handlePinch(sender:)))
         view.addGestureRecognizer(pinch)
         view.backgroundColor = .clear
@@ -92,11 +90,21 @@ final class KLineView: BasicStockView {
     @objc func handlePinch(sender: UIPinchGestureRecognizer){
         let offset: Double = (sender.scale > 1) ? 0.5 : -0.5
         candleWidth = max(2, min(30, candleWidth + offset))
-         print("You pinch me!!")
     }
     
+    lazy var currentLineView: CurrentLineView = {
+       let cv = CurrentLineView()
+        return cv
+    }()
     
+    lazy var currentLineViewTopConstraint: NSLayoutConstraint = .init(item: currentLineView, attribute: .top, relatedBy: .equal, toItem: chartView, attribute: .top, multiplier: 1.0, constant: 0)
     
+    fileprivate func setupCurrentLineView(currentPrice: Double){
+        currentLineView.isHidden = !(currentPrice < rightView.rightMax && currentPrice > rightView.rightMin)
+        let y = convertPosition(system: .Right, value: currentPrice)
+        currentLineViewTopConstraint.constant = y - 8
+        currentLineView.layoutIfNeeded()
+    }
     
     fileprivate func setupLayout() {
         addSubview(rightView)
@@ -116,6 +124,14 @@ final class KLineView: BasicStockView {
         chartsScrollView.layoutIfNeeded()
         chartsScrollView.contentSize = CGSize.init(width: CGFloat(Double(candles.count) * candleWidth), height: gridView.frame.height)
         
+        addSubview(currentLineView)
+        currentLineView.translatesAutoresizingMaskIntoConstraints = false
+        currentLineView.leadingAnchor.constraint(equalTo: gridView.leadingAnchor).isActive = true
+        currentLineView.trailingAnchor.constraint(equalTo: rightView.trailingAnchor).isActive = true
+        currentLineView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        addConstraint(currentLineViewTopConstraint)
+        setupCurrentLineView(currentPrice: theCurrentPrice)
+        
         addSubview(bottomView)
         bottomView.anchor(top: gridView.bottomAnchor, bottom: bottomAnchor, leading: nil, trailing: nil)
         bottomView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
@@ -130,6 +146,15 @@ final class KLineView: BasicStockView {
     }
     
     
+    public func convertPosition(system: PositionSystem, value: Double ) -> CGFloat{
+        rightView.layoutIfNeeded()
+        switch system{
+        case .Right:
+            return CGFloat((rightView.rightMax - value) / rightView.rightDiff) * rightView.frame.height
+        default:
+            return 0
+        }
+    }
     
 }
 
@@ -144,9 +169,7 @@ extension KLineView: UIScrollViewDelegate{
         }else{
             startCandle = Int(Double(scrollView.contentOffset.x) / candleWidth)
         }
-        
-//        startCandle = Int(Double(scrollView.contentOffset.x) / candleWidth) > 0 && Int(Double(scrollView.contentOffset.x) / candleWidth) < candles.count - 1 ? Int(Double(scrollView.contentOffset.x) / candleWidth) : 0
-        
+        setupCurrentLineView(currentPrice: theCurrentPrice)
     }
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         print("You drag me")

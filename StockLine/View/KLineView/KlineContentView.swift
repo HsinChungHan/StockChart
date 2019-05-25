@@ -26,13 +26,13 @@ class KlineContentView: UIView {
             drawChartContentView()
         }
     }
-    var rightView: KLineRightView
+    var kLineView: KLineView
     
-    init(candles: [CandleItems], candleWidth: Double, visibleCount: Int, rightView: KLineRightView) {
+    init(candles: [CandleItems], candleWidth: Double, visibleCount: Int, kLineView: KLineView) {
         self.candles = candles
         self.candleWidth = candleWidth
         self.visibleCount = visibleCount
-        self.rightView = rightView
+        self.kLineView = kLineView
         super.init(frame: .zero)
     }
     
@@ -47,13 +47,12 @@ class KlineContentView: UIView {
     //MARK: -Draw Chart
     fileprivate func drawACandle(high: Double, low: Double, open: Double, close: Double, sequence: Int){
         let candleValue: [CandleValue: CGFloat] = [
-            .yHigh : rightView.convertPosition(system: .Right, value: high),
-            .yLow: rightView.convertPosition(system: .Right, value: low),
-            .yOpen: rightView.convertPosition(system: .Right, value: open),
-            .yClose: rightView.convertPosition(system: .Right, value: close),
+            .yHigh : kLineView.convertPosition(system: .Right, value: high),
+            .yLow: kLineView.convertPosition(system: .Right, value: low),
+            .yOpen: kLineView.convertPosition(system: .Right, value: open),
+            .yClose: kLineView.convertPosition(system: .Right, value: close),
             .xPosition: CGFloat(Double(sequence) * candleWidth) + CGFloat(candleWidth/2)
         ]
-        print(candleValue[.xPosition])
         let strokeColor = (close > open) ? #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1).cgColor : #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1).cgColor
         let highLowLine = UIBezierPath()
         let highLowLayer = CAShapeLayer()
@@ -78,15 +77,12 @@ class KlineContentView: UIView {
     fileprivate func drawChartContentView(){
         let firstVisibleCandle = max(0, startCandle)
         let lastVisibleCandle = min(candles.count-1, startCandle+visibleCount)
-        print("firstVisibleCandle: \(firstVisibleCandle)")
-        print("lastVisibleCandle: \(lastVisibleCandle)")
         layer.sublayers = []
         for index in (firstVisibleCandle...lastVisibleCandle){
             let high = Double(candles[index].High) ?? 0
             let low = Double(candles[index].Low) ?? 0
             let open = Double(candles[index].Open) ?? 0
             let close = Double(candles[index].Close) ?? 0
-            print("index: \(index)")
             drawACandle(high: high, low: low, open: open, close: close, sequence: index)
         }
     }

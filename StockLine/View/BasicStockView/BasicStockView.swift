@@ -13,12 +13,6 @@ enum PositionSystem{
     case Left
 }
 class BasicStockView: UIView {
-    var rightMax: Double = 0
-    var rightMin: Double = 0
-    var rightDiff: Double {
-        return rightMax - rightMin
-    }
-    
     //MARK: -Const
     let chartWidth = UIScreen.main.bounds.width * 2 / 3
     let labelHeight: CGFloat = 40
@@ -115,7 +109,6 @@ class BasicStockView: UIView {
     func drawDottedLines(horizontalLines: Int, verticalLines: Int){
         gridView.layoutIfNeeded()
         let gridBorder = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: gridView.frame.width, height: gridView.frame.height), cornerRadius: 0)
-        print("gridView.frame.width: \(gridView.frame.width)")
         //draw border of gridView
         let gridBorderLayer = CAShapeLayer()
         gridBorderLayer.path = gridBorder.cgPath

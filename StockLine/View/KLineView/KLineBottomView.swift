@@ -42,7 +42,6 @@ class KLineBottomView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        print(frame.width)
         setupBottomView()
     }
     //MARK: - Bottom View
@@ -70,7 +69,6 @@ class KLineBottomView: UIView {
         for index in 1...verticalLines{
             let x = frame.width * CGFloat(Double(index) / Double(verticalLines))
             let offset = Int(Double(visibleCount) * Double(index) / Double(verticalLines))
-            print("Offset: \(offset)")
             setupBottomLabel(value: candles[max(0, min(candles.count - 1, startCandle + offset))].Time.modifyTime(), xPosition: Int(x), storedArray: &currentBottomLabels)
         }
     }

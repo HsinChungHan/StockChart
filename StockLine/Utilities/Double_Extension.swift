@@ -14,7 +14,7 @@ extension Double {
         return (self * divisor).rounded() / divisor
     }
     
-    func translate(decimalPlaces: UInt8) -> String{
+    func translate(decimalPlaces: UInt8 = 5) -> String{
         return String(format: "%.\(decimalPlaces)f", roundTo(places: Int(decimalPlaces)))
     }
 }

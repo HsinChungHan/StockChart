@@ -14,8 +14,7 @@ final class KLineRightView: UIView {
     fileprivate var chartManager = ChartManager()
     var startCandle = 0{
         didSet{
-            fetchRightMaxAndMin()
-            setupRightView()
+            fetchAndRedrawRightView()
         }
     }
     fileprivate var MAValues: [String: [Double]] = [:]
