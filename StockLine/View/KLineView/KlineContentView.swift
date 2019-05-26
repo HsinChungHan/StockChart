@@ -7,24 +7,34 @@
 //
 
 import UIKit
+enum KTechType{
+    case None
+    case MA
+    case BOLL
+}
 
 class KlineContentView: UIView {
     var chartManager = ChartManager()
     var visibleCount: Int{
         didSet{
-            drawChartContentView()
-            drawKTech(values: MAValues)
             setNeedsDisplay()
         }
     }
     
     var candleWidth: Double{
         didSet{
-//            drawChartContentView()
-//            drawKTech(values: MAValues)
             setNeedsDisplay()
         }
     }
+    
+    fileprivate var BollValue: [KTech: [Double]] = [:]{
+        didSet{
+            group.notify(queue: DispatchQueue.main){
+                self.setNeedsDisplay()
+            }
+        }
+    }
+    
     fileprivate var MAValues: [KTech: [Double]] = [:]{
         didSet{
             group.notify(queue: DispatchQueue.main){
@@ -36,7 +46,6 @@ class KlineContentView: UIView {
     
     var startCandle: Int = 0{
         didSet{
-//            drawChartContentView()
             setNeedsDisplay()
         }
     }
@@ -51,6 +60,7 @@ class KlineContentView: UIView {
         
         DispatchQueue.global(qos: .userInteractive).async(group: group){
             self.MAValues = self.chartManager.computeMA(candles: self.candles)
+            self.BollValue = self.chartManager.computeBOLL(candles: self.candles)
         }
     }
     
@@ -58,16 +68,10 @@ class KlineContentView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        drawChartContentView()
-//        drawKTech(values: MAValues)
-//    }
-    
     override func draw(_ rect: CGRect) {
-//        super.draw(rect)
         drawChartContentView()
         drawKTech(values: MAValues)
+        drawKTech(values: BollValue)
     }
    
     
@@ -129,6 +133,12 @@ class KlineContentView: UIView {
                     return #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1).cgColor
                 case .MA30:
                     return #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1).cgColor
+                case .MB:
+                    return #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1).cgColor
+                case .UP:
+                    return #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1).cgColor
+                case .DN:
+                    return #colorLiteral(red: 0.5843137503, green: 0.8235294223, blue: 0.4196078479, alpha: 1).cgColor
                 }
             }
             if let selected = values[key], !selected.isEmpty{
