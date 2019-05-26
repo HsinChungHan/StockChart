@@ -137,13 +137,16 @@ final class KLineView: BasicStockView {
         bottomView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         bottomView.widthAnchor.constraint(equalToConstant: chartWidth).isActive = true
     }
+
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         super.drawDottedLines(horizontalLines: horizontalLines, verticalLines: verticalLines)
         setupLayout()
         chartsScrollView.delegate = self
     }
+    
+    
     
     
     public func convertPosition(system: PositionSystem, value: Double ) -> CGFloat{

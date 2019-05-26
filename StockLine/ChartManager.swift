@@ -7,8 +7,15 @@
 //
 
 import Foundation
+
+enum KTech{
+    case MA5
+    case MA10
+    case MA30
+}
+
 class ChartManager {
-    func computeMA(candles: [CandleItems]) -> [String: [Double]]{
+    func computeMA(candles: [CandleItems]) -> [KTech: [Double]]{
         var ma5: [Double] = []
         var ma10: [Double] = []
         var ma30: [Double] = []
@@ -37,6 +44,6 @@ class ChartManager {
             ma10.append(ma10Sum / 10)
             ma30.append(ma30Sum / 30)
         }
-        return ["MA5": ma5, "MA10": ma10, "MA30": ma30]
+        return [.MA5: ma5, .MA10: ma10, .MA30: ma30]
     }
 }

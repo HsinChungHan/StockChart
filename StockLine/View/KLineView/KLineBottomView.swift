@@ -44,6 +44,7 @@ class KLineBottomView: UIView {
         super.layoutSubviews()
         setupBottomView()
     }
+    
     //MARK: - Bottom View
     fileprivate func setupBottomLabel(value: String, xPosition: Int, storedArray: inout [UILabel]){
         let dateLabel = UILabel.init(frame: CGRect.init(x: xPosition - 30, y: 0, width: 100, height: 16))

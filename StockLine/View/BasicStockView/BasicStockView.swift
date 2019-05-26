@@ -21,7 +21,7 @@ class BasicStockView: UIView {
     //MARK:- Properties
     var dottedLineLength = 5
     fileprivate var chartManager = ChartManager()
-    fileprivate var MAValues: [String: [Double]] = [:]
+    fileprivate var MAValues: [KTech: [Double]] = [:]
     var candles: [CandleItems] = []{
         didSet{
             DispatchQueue.global(qos: .userInteractive).async {
@@ -66,8 +66,6 @@ class BasicStockView: UIView {
     }()
     
     
-    
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
@@ -76,16 +74,6 @@ class BasicStockView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setupLayout()
-    }
-    
-    
-    
-    
     
     
     fileprivate func setupLayout(){
@@ -102,6 +90,11 @@ class BasicStockView: UIView {
         
         gridView.addSubview(chartsScrollView)
         chartsScrollView.fillSuperView()
+    }
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        setupLayout()
     }
     
     

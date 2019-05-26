@@ -17,7 +17,7 @@ final class KLineRightView: UIView {
             fetchAndRedrawRightView()
         }
     }
-    fileprivate var MAValues: [String: [Double]] = [:]
+    fileprivate var MAValues: [KTech: [Double]] = [:]
     var candles: [CandleItems] = []{
         didSet{
             DispatchQueue.global(qos: .userInteractive).async {
