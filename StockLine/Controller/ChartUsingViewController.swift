@@ -9,12 +9,12 @@
 import UIKit
 
 enum Strategy: String, CaseIterable{
-    case today = "分時"
-    case candle = "蠟燭"
-    case ma = "MA上"
-    case boll = "BOLL上"
-    case arbr = "ARBR下"
-    case macd = "MACD下"
+    case today = "Time"
+    case candle = "Candle"
+    case ma = "MA"
+    case boll = "BOLL"
+    case arbr = "ARBR"
+    case macd = "MACD"
     
 }
 
@@ -62,7 +62,13 @@ final class ChartUsingViewController: UIViewController {
     @objc func changeStrategy(sender: UIButton){
         switch sender.title(for: .normal) {
         case Strategy.today.rawValue :
-            chartVC.kLineView.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
+            chartVC.kLineView.chartView.techType = .candle
+        case Strategy.candle.rawValue:
+            chartVC.kLineView.chartView.techType = .candle
+        case Strategy.ma.rawValue:
+            chartVC.kLineView.chartView.techType = .ma
+        case Strategy.boll.rawValue:
+            chartVC.kLineView.chartView.techType = .boll
         default:
             return
         }

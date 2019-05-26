@@ -23,25 +23,12 @@ class KlineContentView: UIView {
     
     var candleWidth: Double{
         didSet{
-            setNeedsDisplay()
+           setNeedsDisplay()
         }
     }
     
-    fileprivate var BollValue: [KTech: [Double]] = [:]{
-        didSet{
-            group.notify(queue: DispatchQueue.main){
-                self.setNeedsDisplay()
-            }
-        }
-    }
-    
-    fileprivate var MAValues: [KTech: [Double]] = [:]{
-        didSet{
-            group.notify(queue: DispatchQueue.main){
-                self.setNeedsDisplay()
-            }
-        }
-    }
+    fileprivate var BollValue: [KTech: [Double]] = [:]
+    fileprivate var MAValues: [KTech: [Double]] = [:]
     var candles: [CandleItems]
     
     var startCandle: Int = 0{
@@ -49,8 +36,13 @@ class KlineContentView: UIView {
             setNeedsDisplay()
         }
     }
+    
+    var techType: Strategy = .today{
+        didSet{
+            setNeedsDisplay()
+        }
+    }
     var kLineView: KLineView
-    let group = DispatchGroup()
     init(candles: [CandleItems], candleWidth: Double, visibleCount: Int, kLineView: KLineView) {
         self.candles = candles
         self.candleWidth = candleWidth
@@ -58,7 +50,7 @@ class KlineContentView: UIView {
         self.kLineView = kLineView
         super.init(frame: .zero)
         
-        DispatchQueue.global(qos: .userInteractive).async(group: group){
+        DispatchQueue.global(qos: .userInteractive).async{
             self.MAValues = self.chartManager.computeMA(candles: self.candles)
             self.BollValue = self.chartManager.computeBOLL(candles: self.candles)
         }
@@ -69,11 +61,9 @@ class KlineContentView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        drawChartContentView()
-        drawKTech(values: MAValues)
-        drawKTech(values: BollValue)
+        drawKTech(techType: techType)
     }
-   
+    
     
     //MARK: -Draw Chart
     fileprivate func drawACandle(high: Double, low: Double, open: Double, close: Double, sequence: Int){
@@ -109,6 +99,7 @@ class KlineContentView: UIView {
         let firstVisibleCandle = max(0, startCandle)
         let lastVisibleCandle = min(candles.count-1, startCandle+visibleCount)
         layer.sublayers = []
+        
         for index in (firstVisibleCandle...lastVisibleCandle){
             let high = Double(candles[index].High) ?? 0
             let low = Double(candles[index].Low) ?? 0
@@ -119,6 +110,23 @@ class KlineContentView: UIView {
     }
  
     //MARK: -Draw KTech Line
+    fileprivate func drawKTech(techType: Strategy){
+        switch techType {
+        case .today:
+            drawChartContentView()
+        case .ma:
+            drawChartContentView()
+            drawKTech(values: MAValues)
+        case .boll:
+            drawChartContentView()
+            drawKTech(values: BollValue)
+        case .candle:
+            drawChartContentView()
+        default:
+            return
+        }
+    }
+    
     
     fileprivate func drawKTech(values: [KTech: [Double]]){
         let keys = values.keys
