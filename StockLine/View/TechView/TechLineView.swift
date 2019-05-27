@@ -1,5 +1,5 @@
 //
-//  KLineView.swift
+//  TechView.swift
 //  StockLine
 //
 //  Created by Chung Han Hsin on 2019/5/15.
@@ -7,26 +7,25 @@
 //
 
 import UIKit
-enum ContentOffsetType {
-    case Current
-    case ToLast
-}
-
-enum CandleValue{
-    case yHigh
-    case yLow
-    case yOpen
-    case yClose
-    case xPosition
-}
-
-final class KLineView: BasicStockView{
-    var isMountain = false
+final class TechLineView: BasicStockView {
+    fileprivate var _horizontalLines: Int = 3
+    override var horizontalLines: Int{
+        get {return _horizontalLines}
+        set {_horizontalLines = newValue}
+    }
+    
+    fileprivate var _verticalLines: Int = 3
+    override var verticalLines: Int{
+        get {return _verticalLines}
+        set {_verticalLines = newValue}
+    }
+    
+    
+    
     var scrollViewContentOffset: CGFloat = 0
     var visibleCount: Int{
         return Int(gridView.frame.width / CGFloat(candleWidth))
     }
-    
     
     var candleWidth: Double = 5{
         didSet{
@@ -66,21 +65,22 @@ final class KLineView: BasicStockView{
         }
     }
     
-    lazy var rightView: KLineRightView = {
-        let view = KLineRightView.init(candles: candles, visibleCount: visibleCount, horizontalLines: horizontalLines)
+    lazy var rightView: TechLineRightView = {
+        let view = TechLineRightView.init(visibleCount: visibleCount, horizontalLines: horizontalLines)
+        view.candles = candles
         view.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         view.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - chartWidth)/2).isActive = true
         return view
     }()
     
-    lazy var bottomView: KLineBottomView = {
-        let view = KLineBottomView.init(candles: candles, visibleCount: visibleCount, verticalLines: verticalLines)
+    lazy var bottomView: TechLineBottomView = {
+        let view = TechLineBottomView.init(candles: candles, visibleCount: visibleCount, verticalLines: verticalLines)
         view.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
         return view
     }()
     
-    lazy var chartView: KlineContentView = {
-        let view = KlineContentView.init(candleWidth: candleWidth, visibleCount: visibleCount, kLineView: self)
+    lazy var chartView: TechLineContentView = {
+        let view = TechLineContentView.init(candleWidth: candleWidth, visibleCount: visibleCount, techLineView: self)
         view.candles = candles
         let pinch = UIPinchGestureRecognizer.init(target: self, action: #selector(handlePinch(sender:)))
         view.addGestureRecognizer(pinch)
@@ -94,22 +94,16 @@ final class KLineView: BasicStockView{
     }
     
     lazy var currentLineView: CurrentLineView = {
-       let cv = CurrentLineView()
+        let cv = CurrentLineView()
         return cv
     }()
     
-    lazy var currentLineViewTopConstraint: NSLayoutConstraint = .init(item: currentLineView, attribute: .top, relatedBy: .equal, toItem: chartView, attribute: .top, multiplier: 1.0, constant: 0)
-    
-    fileprivate func setupCurrentLineView(currentPrice: Double){
-        currentLineView.isHidden = !(currentPrice < rightView.rightMax && currentPrice > rightView.rightMin)
-        let y = convertPosition(system: .Right, value: currentPrice)
-        currentLineViewTopConstraint.constant = y - 8
-        currentLineView.layoutIfNeeded()
-    }
+   
     
     fileprivate func setupLayout() {
         addSubview(rightView)
         rightView.anchor(top: gridView.topAnchor, bottom: gridView.bottomAnchor, leading: gridView.trailingAnchor, trailing: trailingAnchor)
+        
         
         chartsScrollView.addSubview(chartView)
         chartView.anchor(top: chartsScrollView.topAnchor, bottom: chartsScrollView.bottomAnchor, leading: chartsScrollView.leadingAnchor, trailing: nil)
@@ -125,20 +119,12 @@ final class KLineView: BasicStockView{
         chartsScrollView.layoutIfNeeded()
         chartsScrollView.contentSize = CGSize.init(width: CGFloat(Double(candles.count) * candleWidth), height: gridView.frame.height)
         
-        addSubview(currentLineView)
-        currentLineView.translatesAutoresizingMaskIntoConstraints = false
-        currentLineView.leadingAnchor.constraint(equalTo: gridView.leadingAnchor).isActive = true
-        currentLineView.trailingAnchor.constraint(equalTo: rightView.trailingAnchor).isActive = true
-        currentLineView.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        addConstraint(currentLineViewTopConstraint)
-        setupCurrentLineView(currentPrice: theCurrentPrice)
-        
         addSubview(bottomView)
         bottomView.anchor(top: gridView.bottomAnchor, bottom: bottomAnchor, leading: nil, trailing: nil)
         bottomView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         bottomView.widthAnchor.constraint(equalToConstant: chartWidth).isActive = true
     }
-
+    
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
@@ -167,10 +153,7 @@ final class KLineView: BasicStockView{
         }else{
             startCandle = Int(Double(scrollView.contentOffset.x) / candleWidth)
         }
-        setupCurrentLineView(currentPrice: theCurrentPrice)
     }
     
 }
-
-
 

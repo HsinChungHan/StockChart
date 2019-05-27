@@ -16,23 +16,12 @@ class BasicStockView: UIView {
     //MARK: -Const
     let chartWidth = UIScreen.main.bounds.width * 2 / 3
     let labelHeight: CGFloat = 40
-//    var candleWidth: Double = 5
     
     //MARK:- Properties
     var dottedLineLength = 5
-    fileprivate var chartManager = ChartManager()
-    fileprivate var MAValues: [KTech: [Double]] = [:]
-    var candles: [CandleItems] = []{
-        didSet{
-            DispatchQueue.global(qos: .userInteractive).async {
-                self.MAValues = self.chartManager.computeMA(candles: self.candles)
-            }
-        }
-    }
-//    var visibleCount: Int{
-//        return Int(gridView.frame.width / CGFloat(candleWidth))
-//    }
-    var horizontalLines = 4
+    var candles: [CandleItems] = []
+
+    var horizontalLines: Int = 4
     var verticalLines = 3
     
     //MARK: View
@@ -59,9 +48,8 @@ class BasicStockView: UIView {
     
     lazy var chartsScrollView: UIScrollView = {
        let sv = UIScrollView()
-        sv.backgroundColor = .clear
+        sv.backgroundColor = #colorLiteral(red: 1, green: 0.2527923882, blue: 1, alpha: 1)
         sv.isScrollEnabled = true
-        
         return sv
     }()
     

@@ -1,15 +1,14 @@
 //
-//  KlineContentView.swift
+//  TechLineContentView.swift
 //  StockLine
 //
-//  Created by Chung Han Hsin on 2019/5/25.
+//  Created by Chung Han Hsin on 2019/5/26.
 //  Copyright © 2019 Chung Han Hsin. All rights reserved.
 //
 
 import UIKit
 
-
-class KlineContentView: UIView {
+class TechLineContentView: UIView {
     var chartManager = ChartManager()
     var visibleCount: Int{
         didSet{
@@ -19,18 +18,11 @@ class KlineContentView: UIView {
     
     var candleWidth: Double{
         didSet{
-           setNeedsDisplay()
+            setNeedsDisplay()
         }
     }
     
-    fileprivate var BollValue: [Tech: [Double]] = [:]{
-        didSet{
-            DispatchQueue.main.async {
-                self.setNeedsDisplay()
-            }
-        }
-    }
-    fileprivate var MAValues: [Tech: [Double]] = [:]{
+    fileprivate var ARBRValue: [Tech: [Double]] = [:]{
         didSet{
             DispatchQueue.main.async {
                 self.setNeedsDisplay()
@@ -40,10 +32,9 @@ class KlineContentView: UIView {
     var candles: [CandleItems] = []{
         didSet{
             DispatchQueue.global(qos: .userInteractive).async {
-                self.MAValues = self.chartManager.computeMA(candles: self.candles)
-                self.BollValue = self.chartManager.computeBOLL(candles: self.candles)
+                 self.ARBRValue = self.chartManager.computeARBR(candles: self.candles)
             }
-            
+           
         }
     }
     
@@ -53,16 +44,16 @@ class KlineContentView: UIView {
         }
     }
     
-    var techType: Strategy = .today{
+    var techType: Strategy = .arbr{
         didSet{
             setNeedsDisplay()
         }
     }
-    var kLineView: KLineView
-    init(candleWidth: Double, visibleCount: Int, kLineView: KLineView) {
+    var techLineView: TechLineView
+    init(candleWidth: Double, visibleCount: Int, techLineView: TechLineView) {
         self.candleWidth = candleWidth
         self.visibleCount = visibleCount
-        self.kLineView = kLineView
+        self.techLineView = techLineView
         super.init(frame: .zero)
     }
     
@@ -78,10 +69,10 @@ class KlineContentView: UIView {
     //MARK: -Draw Chart
     fileprivate func drawACandle(high: Double, low: Double, open: Double, close: Double, sequence: Int){
         let candleValue: [CandleValue: CGFloat] = [
-            .yHigh : kLineView.convertPosition(system: .Right, value: high),
-            .yLow: kLineView.convertPosition(system: .Right, value: low),
-            .yOpen: kLineView.convertPosition(system: .Right, value: open),
-            .yClose: kLineView.convertPosition(system: .Right, value: close),
+            .yHigh : techLineView.convertPosition(system: .Right, value: high),
+            .yLow: techLineView.convertPosition(system: .Right, value: low),
+            .yOpen: techLineView.convertPosition(system: .Right, value: open),
+            .yClose: techLineView.convertPosition(system: .Right, value: close),
             .xPosition: CGFloat(Double(sequence) * candleWidth) + CGFloat(candleWidth/2)
         ]
         let strokeColor = (close > open) ? #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1).cgColor : #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1).cgColor
@@ -118,20 +109,13 @@ class KlineContentView: UIView {
             drawACandle(high: high, low: low, open: open, close: close, sequence: index)
         }
     }
- 
+    
     //MARK: -Draw KTech Line
     fileprivate func drawKTech(techType: Strategy){
         switch techType {
-        case .today:
-            drawChartContentView()
-        case .ma:
-            drawChartContentView()
-            drawKTech(values: MAValues)
-        case .boll:
-            drawChartContentView()
-            drawKTech(values: BollValue)
-        case .candle:
-            drawChartContentView()
+        case .arbr:
+//            drawChartContentView()
+            drawKTech(values: ARBRValue)
         default:
             return
         }
@@ -139,39 +123,28 @@ class KlineContentView: UIView {
     
     
     fileprivate func drawKTech(values: [Tech: [Double]]){
+        layer.sublayers = []
         let keys = values.keys
         for key in keys{
             let techLine = UIBezierPath()
             let techLineLayer = CAShapeLayer()
             var strokeColor: CGColor{
                 switch key {
-                case .MA5 :
+                case .AR:
                     return #colorLiteral(red: 0.7254902124, green: 0.4784313738, blue: 0.09803921729, alpha: 1).cgColor
-                case .MA10:
+                case .BR:
                     return #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1).cgColor
-                case .MA30:
-                    return #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1).cgColor
-                case .MB:
-                    return #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1).cgColor
-                case .UP:
-                    return #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1).cgColor
                 default:
                     return UIColor.clear.cgColor
-//                case .DN:
-//                    return #colorLiteral(red: 0.5843137503, green: 0.8235294223, blue: 0.4196078479, alpha: 1).cgColor
-//                case .AR:
-//                    return #colorLiteral(red: 0.7254902124, green: 0.4784313738, blue: 0.09803921729, alpha: 1).cgColor
-//                case .BR:
-//                    return #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1).cgColor
                 }
             }
             if let selected = values[key], !selected.isEmpty{
                 
-                let firstValue = kLineView.convertPosition(system: .Right, value: selected[0])
+                let firstValue = techLineView.convertPosition(system: .Right, value: selected[0])
                 techLine.move(to: CGPoint.init(x: CGFloat(candleWidth / 2), y: firstValue))
                 for index in max(1, startCandle) ... min(candles.count - 1, startCandle + visibleCount){
                     let xPosition = CGFloat(Double(index)*candleWidth) + CGFloat(candleWidth/2)
-                    let yPosition = kLineView.convertPosition(system: .Right, value: selected[index])
+                    let yPosition = techLineView.convertPosition(system: .Right, value: selected[index])
                     techLine.addLine(to: CGPoint.init(x: xPosition, y: yPosition))
                     print("xPosition: \(xPosition)")
                     print("yPosition: \(yPosition)")

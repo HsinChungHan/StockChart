@@ -1,32 +1,33 @@
 //
-//  KLineBottomView.swift
+//  TechLineBottomView.swift
 //  StockLine
 //
-//  Created by Chung Han Hsin on 2019/5/25.
+//  Created by Chung Han Hsin on 2019/5/26.
 //  Copyright © 2019 Chung Han Hsin. All rights reserved.
 //
 
 import UIKit
 
-class KLineBottomView: UIView {
+class TechLineBottomView: UIView {
     lazy var currentBottomLabels = [UILabel]()
     var startCandle = 0{
         didSet{
             setupBottomView()
         }
     }
-    var verticalLines = 4
+    var verticalLines: Int
     var visibleCount: Int{
         didSet{
-             setupBottomView()
+            setupBottomView()
         }
     }
     var candles: [CandleItems] = []
     init(candles: [CandleItems], visibleCount: Int, verticalLines: Int) {
         self.visibleCount = visibleCount
+        self.verticalLines = verticalLines
         super.init(frame: .zero)
         self.candles = candles
-        self.verticalLines = verticalLines
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

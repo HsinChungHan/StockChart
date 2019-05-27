@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D1153B40229ACA14007A3F6D /* TechLineRightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1153B3F229ACA14007A3F6D /* TechLineRightView.swift */; };
+		D1153B42229ACA23007A3F6D /* TechLineBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1153B41229ACA23007A3F6D /* TechLineBottomView.swift */; };
+		D1153B44229ACA33007A3F6D /* TechLineContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1153B43229ACA33007A3F6D /* TechLineContentView.swift */; };
 		D168F5BD22971A7F006D61FE /* String_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D168F5BC22971A7F006D61FE /* String_Extension.swift */; };
 		D168F5BF2297B4F3006D61FE /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D168F5BE2297B4F3006D61FE /* ChartViewController.swift */; };
 		D168F5C7229825F8006D61FE /* KLineRightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D168F5C6229825F8006D61FE /* KLineRightView.swift */; };
@@ -14,7 +17,7 @@
 		D1708FA422923A0200A8041E /* CandleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1708FA322923A0200A8041E /* CandleItem.swift */; };
 		D1708FA622927F1600A8041E /* ChartUsingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1708FA522927F1600A8041E /* ChartUsingViewController.swift */; };
 		D18022CF228C1C4C00FC82EC /* KLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18022CE228C1C4C00FC82EC /* KLineView.swift */; };
-		D18022D1228C1C6F00FC82EC /* TechView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18022D0228C1C6F00FC82EC /* TechView.swift */; };
+		D18022D1228C1C6F00FC82EC /* TechLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18022D0228C1C6F00FC82EC /* TechLineView.swift */; };
 		D18022D3228C1F8A00FC82EC /* CurrentLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18022D2228C1F8A00FC82EC /* CurrentLineView.swift */; };
 		D18022D5228C2C8E00FC82EC /* BasicStockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18022D4228C2C8E00FC82EC /* BasicStockView.swift */; };
 		D18A3612229301650015EC29 /* Double_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18A3611229301650015EC29 /* Double_Extension.swift */; };
@@ -30,6 +33,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D1153B3F229ACA14007A3F6D /* TechLineRightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechLineRightView.swift; sourceTree = "<group>"; };
+		D1153B41229ACA23007A3F6D /* TechLineBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechLineBottomView.swift; sourceTree = "<group>"; };
+		D1153B43229ACA33007A3F6D /* TechLineContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechLineContentView.swift; sourceTree = "<group>"; };
 		D168F5BC22971A7F006D61FE /* String_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String_Extension.swift; sourceTree = "<group>"; };
 		D168F5BE2297B4F3006D61FE /* ChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		D168F5C6229825F8006D61FE /* KLineRightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineRightView.swift; sourceTree = "<group>"; };
@@ -37,7 +43,7 @@
 		D1708FA322923A0200A8041E /* CandleItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleItem.swift; sourceTree = "<group>"; };
 		D1708FA522927F1600A8041E /* ChartUsingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartUsingViewController.swift; sourceTree = "<group>"; };
 		D18022CE228C1C4C00FC82EC /* KLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineView.swift; sourceTree = "<group>"; };
-		D18022D0228C1C6F00FC82EC /* TechView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechView.swift; sourceTree = "<group>"; };
+		D18022D0228C1C6F00FC82EC /* TechLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechLineView.swift; sourceTree = "<group>"; };
 		D18022D2228C1F8A00FC82EC /* CurrentLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLineView.swift; sourceTree = "<group>"; };
 		D18022D4228C2C8E00FC82EC /* BasicStockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStockView.swift; sourceTree = "<group>"; };
 		D18A3611229301650015EC29 /* Double_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double_Extension.swift; sourceTree = "<group>"; };
@@ -160,7 +166,10 @@
 		D1E4558022989E09003599A5 /* TechView */ = {
 			isa = PBXGroup;
 			children = (
-				D18022D0228C1C6F00FC82EC /* TechView.swift */,
+				D18022D0228C1C6F00FC82EC /* TechLineView.swift */,
+				D1153B3F229ACA14007A3F6D /* TechLineRightView.swift */,
+				D1153B41229ACA23007A3F6D /* TechLineBottomView.swift */,
+				D1153B43229ACA33007A3F6D /* TechLineContentView.swift */,
 			);
 			path = TechView;
 			sourceTree = "<group>";
@@ -238,7 +247,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D18022D1228C1C6F00FC82EC /* TechView.swift in Sources */,
+				D18022D1228C1C6F00FC82EC /* TechLineView.swift in Sources */,
 				D194A1E82281A40100B4C943 /* UIViewExtension.swift in Sources */,
 				D1708FA2229239A400A8041E /* ChartManager.swift in Sources */,
 				D168F5C7229825F8006D61FE /* KLineRightView.swift in Sources */,
@@ -253,7 +262,10 @@
 				D18022CF228C1C4C00FC82EC /* KLineView.swift in Sources */,
 				D1C358BB2298A41E0022A91B /* KLineBottomView.swift in Sources */,
 				D18022D3228C1F8A00FC82EC /* CurrentLineView.swift in Sources */,
+				D1153B42229ACA23007A3F6D /* TechLineBottomView.swift in Sources */,
 				D1708FA422923A0200A8041E /* CandleItem.swift in Sources */,
+				D1153B44229ACA33007A3F6D /* TechLineContentView.swift in Sources */,
+				D1153B40229ACA14007A3F6D /* TechLineRightView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,13 +12,15 @@ final class ChartViewController: UIViewController {
     
     public lazy var kLineView: KLineView = {
         let kv = KLineView()
+//        kv.chartsScrollView.delegate = self
         kv.heightAnchor.constraint(equalToConstant: kLineViewHeight).isActive = true
         return kv
     }()
     
     
-    fileprivate lazy var techView: TechView = {
-        let tv = TechView()
+    fileprivate lazy var techLineView: TechLineView = {
+        let tv = TechLineView()
+//        tv.chartsScrollView.delegate = self
         return tv
     }()
     
@@ -32,7 +34,9 @@ final class ChartViewController: UIViewController {
         setupLayout()
         fetchData()
         kLineView.candles = candles
-        
+        techLineView.candles = candles
+        kLineView.chartsScrollView.delegate = self
+        techLineView.chartsScrollView.delegate = self
         
     }
     
@@ -41,7 +45,7 @@ final class ChartViewController: UIViewController {
         let overallStackView = UIStackView()
         overallStackView.axis = .vertical
         overallStackView.addArrangedSubview(kLineView)
-        overallStackView.addArrangedSubview(techView)
+        overallStackView.addArrangedSubview(techLineView)
         view.addSubview(overallStackView)
         overallStackView.anchor(top: view.safeAreaLayoutGuide.topAnchor , bottom: view.safeAreaLayoutGuide.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
  
@@ -59,6 +63,23 @@ final class ChartViewController: UIViewController {
             candles = json.candleItems
         } catch {
             print("candles decode fail")
+        }
+    }
+}
+
+
+extension ChartViewController: UIScrollViewDelegate{
+   
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        kLineView.caculateScrollViewDidScroll(scrollView: scrollView)
+        techLineView.caculateScrollViewDidScroll(scrollView: scrollView)
+        switch scrollView {
+        case kLineView.chartsScrollView :
+            techLineView.chartsScrollView.contentOffset = scrollView.contentOffset
+        case techLineView.chartsScrollView :
+            kLineView.chartsScrollView.contentOffset = scrollView.contentOffset
+        default:
+            return
         }
     }
 }

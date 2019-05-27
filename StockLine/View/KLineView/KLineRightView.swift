@@ -17,12 +17,10 @@ final class KLineRightView: UIView {
             fetchAndRedrawRightView()
         }
     }
-    fileprivate var MAValues: [KTech: [Double]] = [:]
-    var candles: [CandleItems] = []{
+    fileprivate var MAValues: [Tech: [Double]] = [:]
+    var candles: [CandleItems]{
         didSet{
-            DispatchQueue.global(qos: .userInteractive).async {
-                self.MAValues = self.chartManager.computeMA(candles: self.candles)
-            }
+            print(candles)
         }
     }
     var currentRightLabels = [UILabel]()
@@ -41,8 +39,9 @@ final class KLineRightView: UIView {
     init(candles: [CandleItems], visibleCount: Int, horizontalLines: Int) {
         self.visibleCount = visibleCount
         self.horizontalLines = horizontalLines
-        super.init(frame: .zero)
         self.candles = candles
+        super.init(frame: .zero)
+        
         
     }
     
@@ -80,6 +79,7 @@ final class KLineRightView: UIView {
     fileprivate func setupRightLabel(value: String, yPosition: Int, storedArray: inout [UILabel]){
         let valueLabel = UILabel.init(frame: CGRect.init(x: 0, y: yPosition - 8, width: Int(frame.width), height: 16))
         valueLabel.text = value
+        valueLabel.font = .systemFont(ofSize: 12)
         addSubview(valueLabel)
         storedArray.append(valueLabel)
     }
@@ -106,15 +106,5 @@ final class KLineRightView: UIView {
     public func fetchAndRedrawRightView(){
         fetchRightMaxAndMin()
         setupRightView()
-    }
-    
-    public func convertPosition(system: PositionSystem, value: Double ) -> CGFloat{
-        layoutIfNeeded()
-        switch system{
-        case .Right:
-            return CGFloat((rightMax - value) / rightDiff) * frame.height
-        default:
-            return 0
-        }
     }
 }
