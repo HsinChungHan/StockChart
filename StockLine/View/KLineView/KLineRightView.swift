@@ -17,12 +17,7 @@ final class KLineRightView: UIView {
             fetchAndRedrawRightView()
         }
     }
-    fileprivate var MAValues: [Tech: [Double]] = [:]
-    var candles: [CandleItems]{
-        didSet{
-            print(candles)
-        }
-    }
+    var candles: [CandleItems]
     var currentRightLabels = [UILabel]()
     var rightMax: Double = 0
     var rightMin: Double = 0

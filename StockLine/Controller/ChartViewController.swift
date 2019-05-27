@@ -12,7 +12,7 @@ final class ChartViewController: UIViewController {
     
     public lazy var kLineView: KLineView = {
         let kv = KLineView()
-//        kv.chartsScrollView.delegate = self
+        kv.delegate = self
         kv.heightAnchor.constraint(equalToConstant: kLineViewHeight).isActive = true
         return kv
     }()
@@ -20,7 +20,7 @@ final class ChartViewController: UIViewController {
     
     fileprivate lazy var techLineView: TechLineView = {
         let tv = TechLineView()
-//        tv.chartsScrollView.delegate = self
+        tv.delegate = self
         return tv
     }()
     
@@ -48,7 +48,7 @@ final class ChartViewController: UIViewController {
         overallStackView.addArrangedSubview(techLineView)
         view.addSubview(overallStackView)
         overallStackView.anchor(top: view.safeAreaLayoutGuide.topAnchor , bottom: view.safeAreaLayoutGuide.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
- 
+        
         
     }
     
@@ -69,7 +69,7 @@ final class ChartViewController: UIViewController {
 
 
 extension ChartViewController: UIScrollViewDelegate{
-   
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         kLineView.caculateScrollViewDidScroll(scrollView: scrollView)
         techLineView.caculateScrollViewDidScroll(scrollView: scrollView)
@@ -83,3 +83,17 @@ extension ChartViewController: UIScrollViewDelegate{
         }
     }
 }
+
+extension ChartViewController: AdjustWidthDelegate{
+    func adjustTechLine(candleWidth: Double) {
+        
+        techLineView.candleWidth = candleWidth
+    }
+    
+    func adjustKLine(candleWidth: Double) {
+        
+        kLineView.candleWidth = candleWidth
+    }
+    
+}
+

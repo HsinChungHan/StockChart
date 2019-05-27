@@ -7,7 +7,10 @@
 //
 
 import UIKit
+
 final class TechLineView: BasicStockView {
+     var delegate: AdjustWidthDelegate?
+    
     fileprivate var _horizontalLines: Int = 3
     override var horizontalLines: Int{
         get {return _horizontalLines}
@@ -34,6 +37,7 @@ final class TechLineView: BasicStockView {
             
             chartView.visibleCount = visibleCount
             chartView.candleWidth = candleWidth
+            
             
             chartsScrollView.contentSize = CGSize.init(width: CGFloat(Double(candles.count) * candleWidth), height: gridView.frame.height)
             
@@ -91,6 +95,10 @@ final class TechLineView: BasicStockView {
     @objc func handlePinch(sender: UIPinchGestureRecognizer){
         let offset: Double = (sender.scale > 1) ? 0.5 : -0.5
         candleWidth = max(2, min(30, candleWidth + offset))
+        print("visibleCount: \(visibleCount)")
+        print("HHHH")
+        delegate?.adjustKLine(candleWidth: candleWidth)
+        
     }
     
     lazy var currentLineView: CurrentLineView = {

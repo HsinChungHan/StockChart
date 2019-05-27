@@ -20,12 +20,22 @@ enum CandleValue{
     case xPosition
 }
 
+protocol AdjustWidthDelegate {
+    func adjustTechLine(candleWidth: Double)
+    func adjustKLine(candleWidth: Double)
+}
+
+
 final class KLineView: BasicStockView{
+    var delegate: AdjustWidthDelegate?
+    
+    
     var isMountain = false
     var scrollViewContentOffset: CGFloat = 0
     var visibleCount: Int{
         return Int(gridView.frame.width / CGFloat(candleWidth))
     }
+    
     
     
     var candleWidth: Double = 5{
@@ -91,10 +101,12 @@ final class KLineView: BasicStockView{
     @objc func handlePinch(sender: UIPinchGestureRecognizer){
         let offset: Double = (sender.scale > 1) ? 0.5 : -0.5
         candleWidth = max(2, min(30, candleWidth + offset))
+        delegate?.adjustTechLine(candleWidth: candleWidth)
+        
     }
     
     lazy var currentLineView: CurrentLineView = {
-       let cv = CurrentLineView()
+        let cv = CurrentLineView()
         return cv
     }()
     
@@ -138,7 +150,7 @@ final class KLineView: BasicStockView{
         bottomView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         bottomView.widthAnchor.constraint(equalToConstant: chartWidth).isActive = true
     }
-
+    
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
