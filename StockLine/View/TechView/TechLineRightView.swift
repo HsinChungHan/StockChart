@@ -11,22 +11,29 @@ import UIKit
 class TechLineRightView: UIView {
 
     var horizontalLines: Int
-    let decimalPlaces: UInt8 = 3
+    var decimalPlaces: UInt8 = 3
     fileprivate var chartManager = ChartManager()
     var startCandle = 0{
         didSet{
             fetchAndRedrawRightView()
         }
     }
-//    fileprivate var MAValues: [KTech: [Double]] = [:]
+    
+    var techType: Strategy = .arbr{
+        didSet{
+            fetchAndRedrawRightView()
+        }
+    }
+    
+    fileprivate var MACDValues: [Tech: [Double]] = [:]
     fileprivate var ARBRValues: [Tech: [Double]] = [:]
     var candles: [CandleItems] = []{
         didSet{
             DispatchQueue.global(qos: .userInteractive).async {
                 self.ARBRValues = self.chartManager.computeARBR(candles: self.candles)
+                self.MACDValues = self.chartManager.computeMACD(candles: self.candles)
                 DispatchQueue.main.async {
-                    self.fetchRightMaxAndMin(values: self.ARBRValues)
-                    self.setupRightView()
+                    self.fetchAndRedrawRightView()
                 }
             }
         } 
@@ -40,8 +47,7 @@ class TechLineRightView: UIView {
     
     var visibleCount: Int{
         didSet{
-            fetchRightMaxAndMin(values: ARBRValues)
-            setupRightView()
+            fetchAndRedrawRightView()
         }
     }
     init(visibleCount: Int, horizontalLines: Int) {
@@ -52,11 +58,6 @@ class TechLineRightView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-//        fetchAndRedrawRightView()
     }
     
     //MARK: - Right View
@@ -99,9 +100,6 @@ class TechLineRightView: UIView {
         //如此可找到多條線的最大值和最小值
         rightMax = theMaxs.max() ?? 0
         rightMin = theMins.min() ?? 0
-        print(rightMax)
-        print(rightMin)
-        print("-----------")
     }
     
     fileprivate func setupRightLabel(value: String, yPosition: Int, storedArray: inout [UILabel]){
@@ -132,8 +130,17 @@ class TechLineRightView: UIView {
     }
     
     public func fetchAndRedrawRightView(){
-        fetchRightMaxAndMin(values: ARBRValues)
-        setupRightView()
+        switch self.techType{
+        case .arbr:
+            self.fetchRightMaxAndMin(values: self.ARBRValues)
+            self.decimalPlaces = 3
+        case .macd:
+            self.fetchRightMaxAndMin(values: self.MACDValues)
+            self.decimalPlaces = 5
+        default:
+            return
+        }
+        self.setupRightView()
     }
 }
 

@@ -14,11 +14,17 @@ enum Tech{
     case MA5
     case MA10
     case MA30
+    
     case UP
     case MB
     case DN
+    
     case AR
     case BR
+    
+    case MACD
+    case DIF
+    case OSC
 }
 
 class ChartManager {
@@ -128,4 +134,46 @@ class ChartManager {
         return [.AR: AR, .BR: BR]
         
     }
+    
+    
+    //MARK: - MACD
+    //兩條不同速度的 股價指數平滑移動平均線（EMA)，12天移動平均-26天移動平均，來計算兩者間的差離狀態(DIF)，然後再對 DIF 進行指數平滑移動平均(9天)
+    //ema12 = ema12Sum / 12 ; ema26 = ema26Sum / 26 => dif = ema12 - ema26
+    //macd則是用剛剛存下的dif來計算，取9天的dif移動平均
+    //順便計算osc變動速率線：將每一天的dif-9天的dif移動平均(及為OSC的柱狀圖)
+    func computeMACD(candles: [CandleItems]) ->  [Tech: [Double]]{
+        var dif: [Double] = []
+        var macd: [Double] = []
+        var osc: [Double] = []
+        
+        for index in 0 ..< candles.count{
+            var ema12Sum: Double = 0
+            for j in (index-11)...index{
+                let e12: Double = Double(candles[max(0, j)].Close) ?? 0
+                ema12Sum += e12
+            }
+            
+            var ema26Sum: Double = 0
+            for j in (index-25)...index{
+                let e26: Double = Double(candles[max(0, j)].Close) ?? 0
+                ema26Sum += e26
+            }
+            
+            dif.append(ema12Sum/12 - ema26Sum/26)
+        }
+        
+        for index in 0..<dif.count{
+            var difSum: Double = 0
+            for j in (index - 8)...index{
+                let d9: Double = dif[max(0, j)]
+                difSum += d9
+            }
+            
+            macd.append(difSum / 9)
+            osc.append(dif[index] - difSum / 9)
+        }
+        return [.DIF: dif, .OSC: osc, .MACD: macd]
+    }
+    
+    
 }

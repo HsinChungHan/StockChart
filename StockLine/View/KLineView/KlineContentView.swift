@@ -126,10 +126,10 @@ class KlineContentView: UIView {
             drawChartContentView()
         case .ma:
             drawChartContentView()
-            drawKTech(values: MAValues)
+            implementTechLine(values: MAValues)
         case .boll:
             drawChartContentView()
-            drawKTech(values: BollValue)
+            implementTechLine(values: BollValue)
         case .candle:
             drawChartContentView()
         default:
@@ -138,7 +138,7 @@ class KlineContentView: UIView {
     }
     
     
-    fileprivate func drawKTech(values: [Tech: [Double]]){
+    fileprivate func implementTechLine(values: [Tech: [Double]]){
         let keys = values.keys
         for key in keys{
             let techLine = UIBezierPath()

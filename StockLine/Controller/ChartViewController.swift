@@ -18,7 +18,7 @@ final class ChartViewController: UIViewController {
     }()
     
     
-    fileprivate lazy var techLineView: TechLineView = {
+    public lazy var techLineView: TechLineView = {
         let tv = TechLineView()
         tv.delegate = self
         return tv

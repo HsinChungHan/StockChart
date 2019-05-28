@@ -69,6 +69,12 @@ final class ChartUsingViewController: UIViewController {
             chartVC.kLineView.chartView.techType = .ma
         case Strategy.boll.rawValue:
             chartVC.kLineView.chartView.techType = .boll
+        case Strategy.macd.rawValue:
+            chartVC.techLineView.rightView.techType = .macd
+            chartVC.techLineView.chartView.techType = .macd
+        case Strategy.arbr.rawValue:
+            chartVC.techLineView.rightView.techType = .arbr
+            chartVC.techLineView.chartView.techType = .arbr
         default:
             return
         }
